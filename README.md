@@ -16,14 +16,15 @@ It can be used as a target or a source for tools which use _rsync_ to build incr
 ### Volume mounts
 
 - `/etc/ssh-rsync`: path used to persist the host SSH (it is auto-generated if not present, i.e. on the first run).
-- `/data`: path used to read or write.
+- `/data`: path used to actual folder that will be _rsynced_ (as a source or a destination).
     
 
 ### Example
 
 On the server side:
 
-    docker run -d --name rsync-ssh-access 
+    docker run -d \
+        --name rsync-ssh-access \
         -v folder-to-be-rsynced:/data:ro \ 
         -v conf:/etc/ssh-rsync \ 
         -e SSH_PUB_KEYS="ssh-rsa AAAAB.../MsggyE= root@bkupdaemon" \
