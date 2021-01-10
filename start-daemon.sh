@@ -22,7 +22,7 @@ echo "# GENERATED entries" > /root/.ssh/authorized_keys
 if [ -n "$SSH_PUB_KEYS" ]; then
     IFS=,
     for KEY in $SSH_PUB_KEYS; do
-        echo "$KEY" >> /root/.ssh/authorized_keys
+        echo "command=\"/usr/bin/rrsync $RRSYNC_OPT /data\",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding $KEY" >> /root/.ssh/authorized_keys
     done
 fi
 chmod -R go-wx /root/.ssh

@@ -2,7 +2,8 @@ FROM alpine:3.12
 
 RUN apk add -U  \
     openssh-server \
-    rsync && \
+    rsync \
+    rrsync && \
     rm -f /var/cache/apk/*
 
 RUN mkdir /data    
