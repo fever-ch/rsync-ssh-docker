@@ -27,7 +27,7 @@ On the server side:
         -v folder-to-be-rsynced:/data:ro \ 
         -v conf:/etc/ssh-rsync \ 
         -e SSH_PUB_KEYS="ssh-rsa AAAAB.../MsggyE= root@bkupdaemon" \
-        -p 2222:22 fever-ch/rsync-ssh
+        -p 2222:22 feverch/rsync-ssh
 
 On the client side:
 
