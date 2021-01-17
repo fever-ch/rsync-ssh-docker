@@ -14,6 +14,27 @@ if ! [ -f "$HOST_KEY" ]; then
     /usr/bin/ssh-keygen -q -t rsa -f $HOST_KEY -C '' -N ''
 fi
 
+EXTENDED_COMPAT="${EXTENDED_COMPAT:-disabled}"
+
+if [ $EXTENDED_COMPAT == "enabled" ]; then
+    WRAPPER_PATH="/usr/bin/xrrsync"
+else
+    WRAPPER_PATH="/usr/bin/rrsync"
+fi    
+
+RRSYNC_MODE="${RRSYNC_MODE:-undef}"
+
+if [ $RRSYNC_MODE == "none" ]; then
+    RRSYNC_OPT=""
+elif [ $RRSYNC_MODE == "ro" ]; then
+    RRSYNC_OPT="-ro"
+elif [ $RRSYNC_MODE == "rw" ]; then
+    RRSYNC_OPT="-rw"
+else
+    echo "Unspecified rrsync mode, assuming read-only mode"
+    RRSYNC_OPT="-ro"    
+fi
+
 echo root:$(head -c30 /dev/urandom | base64) | chpasswd
 
 mkdir -p /root/.ssh
@@ -22,7 +43,7 @@ echo "# GENERATED entries" > /root/.ssh/authorized_keys
 if [ -n "$SSH_PUB_KEYS" ]; then
     IFS=,
     for KEY in $SSH_PUB_KEYS; do
-        echo "command=\"/usr/bin/rrsync $RRSYNC_OPT /data\",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding $KEY" >> /root/.ssh/authorized_keys
+        echo "command=\"$WRAPPER_PATH $RRSYNC_OPT /data\",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding $KEY" >> /root/.ssh/authorized_keys
     done
 fi
 chmod -R go-wx /root/.ssh

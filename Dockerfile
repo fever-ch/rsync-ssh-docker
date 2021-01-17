@@ -9,7 +9,11 @@ RUN apk add -U  \
 RUN mkdir /data    
 
 ADD start-daemon.sh /
-RUN chmod +x start-daemon.sh
+ADD xrrsync /usr/bin/xrrsync
+
+RUN chmod +x start-daemon.sh /usr/bin/xrrsync
+
+VOLUME [ "/etc/ssh-rsync", "/data" ]
 
 EXPOSE 22
 
